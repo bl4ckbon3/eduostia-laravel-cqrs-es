@@ -1,0 +1,24 @@
+{
+    "name": "eduostia/laravel5-cqrs-es",
+    "description": "Simple Cqrs and Event Sourcing for Laravel 5.",
+    "keywords": ["cqrs", "es", "laravel5-cqrs"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Iqbal Maulana",
+            "email": "iqbal.maulana@eduostia.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "laravel/framework": "5.0.*",
+        "rhumsaa/uuid": "~2.8"
+    },
+    "autoload": {
+
+        "psr-0": {
+            "Cqrs\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
