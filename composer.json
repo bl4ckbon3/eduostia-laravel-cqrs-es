@@ -1,5 +1,6 @@
 {
     "name": "eduostia/laravel-cqrs-es",
+    "type": "library",
     "description": "Simple Cqrs and Event Sourcing for Laravel 5.",
     "keywords": ["cqrs", "es", "laravel5-cqrs"],
     "license": "MIT",
