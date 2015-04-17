@@ -19,6 +19,17 @@ use Cqrs\Domain\DomainEventStreamInterface;
 interface EventStoreInterface {
 
 	/**
+	 * Set table name
+	 *
+	 * @param string $table
+	 *
+	 * @return static
+	 *
+	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
+	 */
+	public function from($table);
+
+	/**
 	 * Find events by id in store and make stream
 	 *
 	 * @param mixed $id

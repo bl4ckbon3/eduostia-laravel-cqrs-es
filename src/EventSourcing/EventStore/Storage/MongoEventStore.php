@@ -22,19 +22,32 @@ use Cqrs\Serializer\SerializableInterface;
  */
 class MongoEventStore implements EventStoreInterface {
 
+	/**
+	 * @var \MongoDB
+	 */
+	private $_conn;
+
+	/**
+	 * @var \MongoCollection|null
+	 */
 	private $_collection;
 
 	/**
 	 * @param \MongoDB $conn
-	 * @param string   $collectionName
 	 */
-	public function __construct(
+	public function __construct(\MongoDB $conn) {
 
-		\MongoDB $conn,
-		$collectionName
-	) {
+		$this->_conn = $conn;
+	}
 
-		$this->_collection = $conn->{$collectionName};
+	/**
+	 * {@inheritDoc}
+	 */
+	public function from($table) {
+
+		$this->_collection = $this->_conn->{$table};
+
+		return $this;
 	}
 
 	/**
