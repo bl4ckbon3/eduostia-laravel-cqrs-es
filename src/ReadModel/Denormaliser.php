@@ -15,7 +15,7 @@ use Cqrs\Domain\DomainEventInterface;
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
  * @created     4/14/15
  */
-abstract class Denormalizer {
+abstract class Denormaliser {
 
 	/**
 	 * @param DomainEventInterface $event
