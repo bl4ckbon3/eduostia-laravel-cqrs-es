@@ -51,6 +51,10 @@ class QueryDispatcher implements QueryDispatcherInterface {
 				$data[] = $this->serialize($record, $viewModel);
 			}
 		}
+		else if ($response instanceof ReadModelInterface) {
+
+			$data = $this->serialize($response, $viewModel);
+		}
 
 		return $data;
 	}
