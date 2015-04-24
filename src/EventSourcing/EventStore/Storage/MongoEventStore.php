@@ -11,6 +11,7 @@
 namespace Cqrs\EventSourcing\EventStore\Storage;
 use Cqrs\Domain\DomainEventStream;
 use Cqrs\Domain\DomainMessage;
+use Cqrs\Domain\ParameterBag;
 use Cqrs\EventSourcing\EventStore\EventStoreInterface;
 use Cqrs\Domain\DomainEventStreamInterface;
 use Cqrs\Domain\DomainMessageInterface;
@@ -163,7 +164,7 @@ class MongoEventStore implements EventStoreInterface {
 			));
 		}
 
-		return $serializedObject['class']::{'deserialize'}($serializedObject['payload']);
+		return $serializedObject['class']::{'deserialize'}(new ParameterBag($serializedObject['payload']));
 	}
 
 	/**

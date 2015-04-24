@@ -9,6 +9,7 @@
  */
 
 namespace Cqrs\ReadModel\Repository;
+use Cqrs\Domain\ParameterBag;
 use Cqrs\ReadModel\ReadModelInterface;
 use MongoDB;
 
@@ -125,7 +126,7 @@ class MongoReadModelRepository implements ReadModelRepositoryInterface {
 			));
 		}
 
-		return $class::{'deserialize'}($serializedObject['payload']);
+		return $class::{'deserialize'}(new ParameterBag($serializedObject['payload']));
 	}
 
 	/**

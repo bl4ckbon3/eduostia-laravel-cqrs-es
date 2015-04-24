@@ -9,6 +9,7 @@
  */
 
 namespace Cqrs\Serializer;
+use Cqrs\Domain\ParameterBag;
 
 
 /**
@@ -20,13 +21,13 @@ interface SerializableInterface {
 	/**
 	 * Convert array data to object instance
 	 *
-	 * @param array $data
+	 * @param ParameterBag $data
 	 *
 	 * @return object
 	 *
 	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
 	 */
-	public static function deserialize(array $data);
+	public static function deserialize(ParameterBag $data);
 
 	/**
 	 * Return object payload data
