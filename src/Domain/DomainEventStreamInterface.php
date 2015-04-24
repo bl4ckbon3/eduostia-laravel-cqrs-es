@@ -17,6 +17,6 @@ namespace Cqrs\Domain;
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
  * @created     4/14/15
  */
-interface DomainEventStreamInterface extends \IteratorAggregate {
+interface DomainEventStreamInterface extends \IteratorAggregate, \Countable {
 
 }

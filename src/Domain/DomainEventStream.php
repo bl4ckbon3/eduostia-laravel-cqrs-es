@@ -39,4 +39,12 @@ class DomainEventStream implements DomainEventStreamInterface {
 
 		return new \ArrayIterator($this->_events);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function count() {
+
+		return count($this->_events);
+	}
 }

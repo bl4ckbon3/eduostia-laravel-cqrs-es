@@ -57,9 +57,12 @@ class EventSourcingRepository implements EventSourcingRepositoryInterface {
 		$this->assertInstanceOf($aggregateRoot, $this->_aggregateRootClass);
 
 		$eventStream = $aggregateRoot->getUncommittedEvents();
-		$this->_eventStore->append($eventStream);
-		$this->publish($eventStream);
 
+		if ($eventStream->count()) {
+
+			$this->_eventStore->append($eventStream);
+			$this->publish($eventStream);
+		}
 	}
 
 	/**
