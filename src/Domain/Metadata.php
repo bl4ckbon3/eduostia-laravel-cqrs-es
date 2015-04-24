@@ -51,9 +51,9 @@ class Metadata implements SerializableInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public static function deserialize(array $data) {
+	public static function deserialize(ParameterBag $data) {
 
-		return new Metadata($data);
+		return new Metadata($data->all());
 	}
 
 	/**
