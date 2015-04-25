@@ -32,6 +32,8 @@ class UuidIdentifier implements Identifier {
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @return static
 	 */
 	public static function generate() {
 
