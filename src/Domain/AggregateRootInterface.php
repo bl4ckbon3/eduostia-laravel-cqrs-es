@@ -9,12 +9,13 @@
  */
 
 namespace Cqrs\Domain;
+use Cqrs\Serializer\SerializableInterface;
 
 /**
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
  * @created     4/14/15
  */
-interface AggregateRootInterface {
+interface AggregateRootInterface extends SerializableInterface {
 
 	/**
 	 * @return string

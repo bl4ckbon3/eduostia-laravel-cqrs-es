@@ -9,8 +9,10 @@
  */
 
 namespace Cqrs\Serializer;
+use Cqrs\Domain\AggregateRootInterface;
 use Cqrs\Domain\Identifier;
 use Cqrs\Domain\ParameterBag;
+use DateTime;
 use ReflectionClass;
 use ReflectionObject;
 
@@ -27,7 +29,14 @@ trait DynamicSerializer {
 	 */
 	public static function deserialize(ParameterBag $data) {
 
-		$reflection     = new ReflectionClass(get_called_class());
+		$caller = get_called_class();
+
+		if (in_array(AggregateRootInterface::class, class_implements($caller))) {
+
+			return $caller::{'deserialize'}($data);
+		}
+
+		$reflection     = new ReflectionClass($caller);
 		$constructor    = $reflection->getConstructor();
 		$parameters     = array();
 
@@ -41,15 +50,16 @@ trait DynamicSerializer {
 				continue;
 			}
 
-			$className = $class->getName();
+			$className  = $class->getName();
+			$value      = $data->get($param->getName());
 
 			if (in_array(Identifier::class, class_implements($className))) {
 
-				$parameters[] = $className::{'fromString'}($data->get($param->getName()));
+				$parameters[] = $className::{'fromString'}($value);
 			}
 			else if(in_array(SerializableInterface::class, class_implements($className))) {
 
-				$parameters[] = $className::{'deserialize'}(new ParameterBag($data->get($param->getName())));
+				$parameters[] = $className::{'deserialize'}(new ParameterBag($value));
 			}
 
 		}

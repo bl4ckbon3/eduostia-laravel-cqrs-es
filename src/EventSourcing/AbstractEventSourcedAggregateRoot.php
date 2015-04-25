@@ -16,6 +16,8 @@ use Cqrs\Domain\DomainEventStreamInterface;
 use Cqrs\Domain\DomainMessage;
 use Cqrs\Domain\DomainMessageInterface;
 use Cqrs\Domain\Metadata;
+use Cqrs\Domain\ParameterBag;
+use Cqrs\Serializer\DynamicSerializer;
 
 /**
  * AggregateRoot create Bounded Context of Entity
@@ -26,6 +28,8 @@ use Cqrs\Domain\Metadata;
  * @created     4/14/15
  */
 abstract class AbstractEventSourcedAggregateRoot implements AggregateRootInterface {
+
+	use DynamicSerializer;
 
 	/**
 	 * Version number of related events.
@@ -40,6 +44,11 @@ abstract class AbstractEventSourcedAggregateRoot implements AggregateRootInterfa
 	 * @var array
 	 */
 	private $_uncommittedEvents = array();
+
+	/**
+	 * Protect constructor
+	 */
+	public final function __construct() {}
 
 	/**
 	 * Add an event to list of uncommitted events AggregateRoot
@@ -141,6 +150,45 @@ abstract class AbstractEventSourcedAggregateRoot implements AggregateRootInterfa
 	public function getChildEntities() {
 
 		return array();
+	}
+
+	/**
+	 * @param string $index
+	 * @param mixed  $value
+	 *
+	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
+	 */
+	public function __set($index, $value) {
+
+		if (property_exists($this, '_' . $index)) {
+
+			$this->{'_' . $index} = $value;
+		}
+		else if (property_exists($this, $index)) {
+
+			$this->{$index} = $value;
+		}
+	}
+
+	/**
+	 * Deserialize Aggregate Root
+	 *
+	 * @param ParameterBag $params
+	 *
+	 * @return static
+	 *
+	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
+	 */
+	public static function deserialize(ParameterBag $params) {
+
+		$object = new static();
+
+		foreach($params->all() as $index => $value) {
+
+			$object->{$index} = $value;
+		}
+
+		return $object;
 	}
 
 	/**
