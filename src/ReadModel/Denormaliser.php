@@ -22,7 +22,7 @@ abstract class Denormaliser {
 	 *
 	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
 	 */
-	public function handle(DomainEventInterface $event) {
+	final public function handle(DomainEventInterface $event) {
 
 		$method = $this->getApplyMethodName($event);
 
