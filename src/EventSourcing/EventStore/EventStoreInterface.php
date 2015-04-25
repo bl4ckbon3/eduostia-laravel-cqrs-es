@@ -19,35 +19,26 @@ use Cqrs\Domain\DomainEventStreamInterface;
 interface EventStoreInterface {
 
 	/**
-	 * Set table name
-	 *
-	 * @param string $table
-	 *
-	 * @return static
-	 *
-	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
-	 */
-	public function from($table);
-
-	/**
 	 * Find events by id in store and make stream
 	 *
-	 * @param mixed $id
+	 * @param string $table
+	 * @param mixed  $id
 	 *
 	 * @return DomainEventStreamInterface
 	 *
 	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
 	 */
-	public function find($id);
+	public function find($table, $id);
 
 	/**
 	 * Persist events from DomainEventStream
 	 *
+	 * @param string $table
 	 * @param DomainEventStreamInterface $eventStream
 	 *
 	 * @return mixed
 	 *
 	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
 	 */
-	public function append(DomainEventStreamInterface $eventStream);
+	public function append($table, DomainEventStreamInterface $eventStream);
 }

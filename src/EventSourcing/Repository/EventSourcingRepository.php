@@ -25,6 +25,7 @@ class EventSourcingRepository implements EventSourcingRepositoryInterface {
 	private $_eventStore;
 	private $_eventDispatcher;
 	private $_aggregateRootClass;
+	private $_table;
 
 	/**
 	 * Initialize new instance
@@ -32,17 +33,20 @@ class EventSourcingRepository implements EventSourcingRepositoryInterface {
 	 * @param EventStoreInterface $eventStore
 	 * @param Dispatcher          $eventDispatcher
 	 * @param string              $aggregateRootClass
+	 * @param string              $table
 	 */
 	public function __construct(
 
 		EventStoreInterface $eventStore,
 		Dispatcher $eventDispatcher,
-		$aggregateRootClass
+		$aggregateRootClass,
+		$table
 	) {
 
 		$this->_eventStore          = $eventStore;
 		$this->_eventDispatcher     = $eventDispatcher;
 		$this->_aggregateRootClass  = $aggregateRootClass;
+		$this->_table               = $table;
 	}
 
 	/**
@@ -60,7 +64,7 @@ class EventSourcingRepository implements EventSourcingRepositoryInterface {
 
 		if ($eventStream->count()) {
 
-			$this->_eventStore->append($eventStream);
+			$this->_eventStore->append($this->_table, $eventStream);
 			$this->publish($eventStream);
 		}
 	}
@@ -72,13 +76,13 @@ class EventSourcingRepository implements EventSourcingRepositoryInterface {
 
 		try {
 
-			$eventStream = $this->_eventStore->find($aggregateRootId);
+			$eventStream = $this->_eventStore->find($this->_table, $aggregateRootId);
 
 			return AggregateRootFactory::create($this->_aggregateRootClass, $eventStream);
 		}
 		catch(\RuntimeException $e) {
 
-			throw new \RuntimeException(sprintf('Aggregate Root with id "%s" not found.', $aggregateRootId));
+			throw new \RuntimeException(sprintf('%s with id "%s" not found.', $this->_aggregateRootClass, $aggregateRootId));
 		}
 	}
 

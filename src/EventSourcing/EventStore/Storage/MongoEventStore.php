@@ -29,11 +29,6 @@ class MongoEventStore implements EventStoreInterface {
 	private $_conn;
 
 	/**
-	 * @var \MongoCollection|null
-	 */
-	private $_collection;
-
-	/**
 	 * @param \MongoDB $conn
 	 */
 	public function __construct(\MongoDB $conn) {
@@ -44,20 +39,11 @@ class MongoEventStore implements EventStoreInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function from($table) {
+	public function find($table, $id) {
 
-		$this->_collection = $this->_conn->{$table};
-
-		return $this;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function find($id) {
-
-		$cursor = $this->_collection->find(array('uuid' => (string) $id));
-		$events = array();
+		$collection = $this->_conn->{$table};
+		$cursor     = $collection->find(array('uuid' => (string) $id));
+		$events     = array();
 
 		if ($cursor->count()) {
 
@@ -75,10 +61,11 @@ class MongoEventStore implements EventStoreInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function append(DomainEventStreamInterface $eventStream) {
+	public function append($table, DomainEventStreamInterface $eventStream) {
 
-		$events = array_map(array($this, 'serialize'), iterator_to_array($eventStream));
-		call_user_func_array(array($this->_collection, 'insert'), $events);
+		$collection     = $this->_conn->{$table};
+		$events         = array_map(array($this, 'serialize'), iterator_to_array($eventStream));
+		call_user_func_array(array($collection, 'insert'), $events);
 	}
 
 	/**
