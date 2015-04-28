@@ -101,8 +101,9 @@ trait MessageValidatorTrait {
 			case 'string': return is_string($value) && !preg_match('/^[0-9]+$/', $value);
 
 			case 'int':
-			case 'integer':
-			case 'float': return preg_match('/^[0-9]+$/', $value);
+			case 'integer': return preg_match('/^[0-9]+$/', $value);
+
+			case 'float':  return $value === null || filter_var($value, FILTER_VALIDATE_FLOAT);
 
 			case 'bool':
 			case 'boolean': return filter_var($value, FILTER_VALIDATE_BOOLEAN);
