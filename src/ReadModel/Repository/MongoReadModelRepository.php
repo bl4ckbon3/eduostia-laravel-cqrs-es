@@ -132,7 +132,7 @@ class MongoReadModelRepository implements ReadModelRepositoryInterface {
 	/**
 	 * Assert ReadModelInterface must be instance of $this->_class
 	 *
-	 * @param ReadModelInterface $class
+	 * @param ReadModelInterface $model
 	 *
 	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
 	 */

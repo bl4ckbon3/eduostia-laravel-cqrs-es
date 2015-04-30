@@ -64,6 +64,11 @@ class Comparison implements ExpressionInterface {
      */
     public function __construct($field, $operator, $value) {
 
+	    $value =
+		    is_object($value) && method_exists($value, '__toString')
+		    ? (string) $value
+		    : $value;
+
         $this->field    = $field;
         $this->operator = $operator;
         $this->value    = $value;
