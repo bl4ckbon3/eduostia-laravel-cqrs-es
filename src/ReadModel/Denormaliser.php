@@ -20,6 +20,8 @@ abstract class Denormaliser {
 	/**
 	 * @param DomainEventInterface $event
 	 *
+	 * @return ReadModelInterface|false
+	 *
 	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
 	 */
 	public function handle(DomainEventInterface $event) {
@@ -28,10 +30,10 @@ abstract class Denormaliser {
 
 		if ( ! method_exists($this, $method)) {
 
-			return;
+			return false;
 		}
 
-		$this->{$method}($event);
+		return $this->{$method}($event);
 	}
 
 	/**

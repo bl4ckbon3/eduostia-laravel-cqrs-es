@@ -54,6 +54,8 @@ class EventSourcingRepository implements EventSourcingRepositoryInterface {
 	 *
 	 * @param AggregateRootInterface $aggregateRoot
 	 *
+	 * @return array | null
+	 *
 	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
 	 */
 	public function persist(AggregateRootInterface $aggregateRoot) {
@@ -65,8 +67,11 @@ class EventSourcingRepository implements EventSourcingRepositoryInterface {
 		if ($eventStream->count()) {
 
 			$this->_eventStore->append($this->_table, $eventStream);
-			$this->publish($eventStream);
+
+			return $this->publish($eventStream);
 		}
+
+		return null;
 	}
 
 	/**
@@ -91,17 +96,23 @@ class EventSourcingRepository implements EventSourcingRepositoryInterface {
 	 *
 	 * @param DomainEventStreamInterface $domainEventStream
 	 *
+	 * @return array
+	 *
 	 * @author Iqbal Maulana <iq.bluejack@gmail.com>
 	 */
 	private function publish(DomainEventStreamInterface $domainEventStream) {
+
+		$results = array();
 
 		foreach($domainEventStream as $domainMessage) {
 
 			/**
 			 * @var DomainMessageInterface $domainMessage
 			 */
-			$this->_eventDispatcher->fire($domainMessage->getPayload());
+			$results[] = $this->_eventDispatcher->fire($domainMessage->getPayload());
 		}
+
+		return $results;
 	}
 
 	/**
