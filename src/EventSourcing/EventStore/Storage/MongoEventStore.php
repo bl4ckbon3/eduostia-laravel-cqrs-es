@@ -42,7 +42,7 @@ class MongoEventStore implements EventStoreInterface {
 	public function find($table, $id) {
 
 		$collection = $this->_conn->{$table};
-		$cursor     = $collection->find(array('uuid' => (string) $id));
+		$cursor     = $collection->find(array('uuid' => (string) $id))->sort(array('version' => 1));
 		$events     = array();
 
 		if ($cursor->count()) {
