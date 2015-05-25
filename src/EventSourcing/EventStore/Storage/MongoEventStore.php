@@ -65,7 +65,8 @@ class MongoEventStore implements EventStoreInterface {
 
 		$collection     = $this->_conn->{$table};
 		$events         = array_map(array($this, 'serialize'), iterator_to_array($eventStream));
-		call_user_func_array(array($collection, 'insert'), $events);
+
+		call_user_func(array($collection, 'batchInsert'), $events);
 	}
 
 	/**
