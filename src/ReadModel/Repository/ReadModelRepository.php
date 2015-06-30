@@ -16,7 +16,7 @@ use Cqrs\ReadModel\Storage\ReadModelStorageInterface;
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
  * @created     6/30/15
  */
-abstract class ReadModelReadModelRepository implements ReadModelRepositoryInterface {
+abstract class ReadModelRepository implements ReadModelRepositoryInterface {
 
     protected $storage;
     protected $table;
