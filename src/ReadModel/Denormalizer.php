@@ -10,6 +10,7 @@
 
 namespace Cqrs\ReadModel;
 use Cqrs\Domain\DomainEventInterface;
+use ReflectionClass;
 
 /**
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
@@ -34,6 +35,42 @@ abstract class Denormalizer {
         }
 
         return $this->{$method}($event);
+    }
+
+    /**
+     * Denormalize DomainEventInterface to ReadModel
+     *
+     * @param string               $readModelClass
+     * @param DomainEventInterface $event
+     *
+     * @return object
+     *
+     * @author Iqbal Maulana <iq.bluejack@gmail.com>
+     */
+    protected function denormalize($readModelClass, DomainEventInterface $event) {
+
+        if ( ! in_array($readModelClass, class_implements(ReadModelInterface::class))) {
+
+            throw new \InvalidArgumentException(sprintf('Class "%s" not implement ReadModelInterface', $readModelClass));
+        }
+
+        $reflection     = new ReflectionClass($readModelClass);
+        $constructor    = $reflection->getConstructor();
+        $payload        = $event->serialize();
+        $parameters     = [];
+
+        foreach($constructor->getParameters() as $param) {
+
+            if (isset($payload[$param->getName()])) {
+
+                $parameters[] = $payload[$param->getName()];
+                continue;
+            }
+
+            $parameters[] = null;
+        }
+
+        return $reflection->newInstanceArgs($parameters);
     }
 
     /**
