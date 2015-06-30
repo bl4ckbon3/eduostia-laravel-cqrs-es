@@ -15,7 +15,6 @@ use Cqrs\ReadModel\ReadModelInterface;
 /**
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
  * @created     4/14/15
- * @deprecated
  */
 interface ReadModelRepositoryInterface {
 

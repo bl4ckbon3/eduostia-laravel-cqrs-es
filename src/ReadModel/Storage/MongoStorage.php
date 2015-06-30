@@ -9,6 +9,7 @@
  */
 
 namespace Cqrs\ReadModel\Storage;
+use Cqrs\ReadModel\Repository\ReadModelRepositoryInterface;
 use MongoDB;
 use Cqrs\ReadModel\ReadModelInterface;
 use Cqrs\Domain\ParameterBag;
@@ -17,7 +18,7 @@ use Cqrs\Domain\ParameterBag;
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
  * @created     6/30/15
  */
-class MongoStorage {
+class MongoStorage implements ReadModelRepositoryInterface {
 
     private $_collection;
     private $_class;

@@ -15,16 +15,16 @@ use Cqrs\ReadModel\ReadModelInterface;
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
  * @created     6/30/15
  */
-abstract class Repository implements RepositoryInterface {
+abstract class ReadModelReadModelRepository implements ReadModelRepositoryInterface {
 
     protected $storage;
 
     /**
      * Initialize instance and bind storage
      *
-     * @param RepositoryInterface $storage
+     * @param ReadModelRepositoryInterface $storage
      */
-    public function __construct(RepositoryInterface $storage) {
+    public function __construct(ReadModelRepositoryInterface $storage) {
 
         $this->storage = $storage;
     }
