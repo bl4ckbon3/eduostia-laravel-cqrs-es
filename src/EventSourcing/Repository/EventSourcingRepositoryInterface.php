@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the laravel-cqrs package.
+ * This file is part of the Eduostia package.
  *
  * (c) Eduostia Corporation <http://eduostia.com>
  *

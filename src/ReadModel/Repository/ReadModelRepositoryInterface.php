@@ -1,6 +1,6 @@
 <?php
 /*
- * This file is part of the laravel-cqrs package.
+ * This file is part of the Eduostia package.
  *
  * (c) Eduostia Corporation <http://eduostia.com>
  *
@@ -15,6 +15,7 @@ use Cqrs\ReadModel\ReadModelInterface;
 /**
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
  * @created     4/14/15
+ * @deprecated
  */
 interface ReadModelRepositoryInterface {
 
