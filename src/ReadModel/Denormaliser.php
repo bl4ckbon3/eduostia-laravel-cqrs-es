@@ -14,6 +14,7 @@ use Cqrs\Domain\DomainEventInterface;
 /**
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
  * @created     4/14/15
+ * @deprecated
  */
 abstract class Denormaliser {
 
