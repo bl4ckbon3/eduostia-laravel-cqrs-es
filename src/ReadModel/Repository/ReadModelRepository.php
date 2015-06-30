@@ -10,6 +10,7 @@
 
 namespace Cqrs\ReadModel\Repository;
 use Cqrs\ReadModel\ReadModelInterface;
+use Cqrs\ReadModel\Storage\ReadModelStorageInterface;
 
 /**
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
@@ -18,13 +19,17 @@ use Cqrs\ReadModel\ReadModelInterface;
 abstract class ReadModelReadModelRepository implements ReadModelRepositoryInterface {
 
     protected $storage;
+    protected $table;
+    protected $class;
 
     /**
      * Initialize instance and bind storage
      *
-     * @param ReadModelRepositoryInterface $storage
+     * @param ReadModelStorageInterface $storage
+     * @param string                    $table
+     * @param string                    $class
      */
-    public function __construct(ReadModelRepositoryInterface $storage) {
+    public function __construct(ReadModelStorageInterface $storage, $table, $class) {
 
         $this->storage = $storage;
     }
@@ -38,7 +43,7 @@ abstract class ReadModelReadModelRepository implements ReadModelRepositoryInterf
      */
     public function save(ReadModelInterface $model) {
 
-        return $this->storage->save($model);
+        return $this->storage->save($model, $this->table, $this->class);
     }
 
     /**
@@ -52,7 +57,7 @@ abstract class ReadModelReadModelRepository implements ReadModelRepositoryInterf
      */
     public function find($id) {
 
-        return $this->storage->find($id);
+        return $this->storage->find($id, $this->table, $this->class);
     }
 
     /**
@@ -66,7 +71,7 @@ abstract class ReadModelReadModelRepository implements ReadModelRepositoryInterf
      */
     public function findBy(array $fields) {
 
-        return $this->storage->findBy($fields);
+        return $this->storage->findBy($fields, $this->table);
     }
 
     /**
@@ -78,7 +83,7 @@ abstract class ReadModelReadModelRepository implements ReadModelRepositoryInterf
      */
     public function findAll() {
 
-        return $this->storage->findAll();
+        return $this->storage->findAll($this->table, $this->class);
     }
 
     /**
@@ -90,6 +95,6 @@ abstract class ReadModelReadModelRepository implements ReadModelRepositoryInterf
      */
     public function remove($id) {
 
-        return $this->storage->remove($id);
+        return $this->storage->remove($id, $this->table, $this->class);
     }
 }

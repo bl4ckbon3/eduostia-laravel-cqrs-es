@@ -9,7 +9,6 @@
  */
 
 namespace Cqrs\ReadModel\Storage;
-use Cqrs\ReadModel\Repository\ReadModelRepositoryInterface;
 use MongoDB;
 use Cqrs\ReadModel\ReadModelInterface;
 use Cqrs\Domain\ParameterBag;
@@ -18,28 +17,24 @@ use Cqrs\Domain\ParameterBag;
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
  * @created     6/30/15
  */
-class MongoStorage implements ReadModelRepositoryInterface {
+class MongoStorage implements ReadModelStorageInterface {
 
-    private $_collection;
-    private $_class;
+    private $_conn;
 
     /**
-     * @param MongoDB $client
-     * @param string  $collectionName
-     * @param string  $class
+     * @param MongoDB $conn
      */
-    public function __construct(MongoDB $client, $collectionName, $class) {
+    public function __construct(MongoDB $conn) {
 
-        $this->_collection  = $client->{$collectionName};
-        $this->_class       = $class;
+        $this->_conn = $conn;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function save(ReadModelInterface $model) {
+    public function save(ReadModelInterface $model, $collection, $class) {
 
-        $this->assertInstanceOf($model);
+        $this->assertInstanceOf($model, $class);
 
         $params = [
             'type'      => get_class($model),
@@ -47,22 +42,22 @@ class MongoStorage implements ReadModelRepositoryInterface {
             'payload'   => $model->serialize()
         ];
 
-        if ($this->find($model->getId())) {
+        if ($this->find($model->getId(), $collection, $class)) {
 
-            $this->_collection->update(['type' => get_class($model), 'id' => $model->getId()], $params);
+            $this->_conn->{$collection}->update(['type' => get_class($model), 'id' => $model->getId()], $params);
         }
         else {
 
-            $this->_collection->insert($params);
+            $this->_conn->{$collection}->insert($params);
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public function find($id) {
+    public function find($id, $collection, $class) {
 
-        if ($record = $this->_collection->findOne(['type' => $this->_class, 'id' => (string) $id])) {
+        if ($record = $this->_conn->{$collection}->findOne(['type' => $class, 'id' => (string) $id])) {
 
             return $this->deserialize($record);
         }
@@ -73,9 +68,9 @@ class MongoStorage implements ReadModelRepositoryInterface {
     /**
      * {@inheritDoc}
      */
-    public function findBy(array $fields) {
+    public function findBy(array $fields, $collection) {
 
-        $results = $this->_collection->find($this->modifyKeysForSearch($fields));
+        $results = $this->_conn->{$collection}->find($this->modifyKeysForSearch($fields));
 
         if ($results->count()) {
 
@@ -88,9 +83,9 @@ class MongoStorage implements ReadModelRepositoryInterface {
     /**
      * {@inheritDoc}
      */
-    public function findAll() {
+    public function findAll($collection, $class) {
 
-        $results = iterator_to_array($this->_collection->find(['type' => $this->_class]));
+        $results = iterator_to_array($this->_conn->{$collection}->find(['type' => $class]));
 
         return array_map([$this, 'deserialize'], $results);
     }
@@ -98,9 +93,9 @@ class MongoStorage implements ReadModelRepositoryInterface {
     /**
      * {@inheritDoc}
      */
-    public function remove($id) {
+    public function remove($id, $collection, $class) {
 
-        $this->_collection->remove(['id' => (string) $id, 'type' => $this->_class]);
+        $this->_conn->{$collection}->remove(['id' => (string) $id, 'type' => $class]);
     }
 
     /**
@@ -134,12 +129,13 @@ class MongoStorage implements ReadModelRepositoryInterface {
      * Assert ReadModelInterface must be instance of $this->_class
      *
      * @param ReadModelInterface $model
+     * @param string             $class
      *
      * @author Iqbal Maulana <iq.bluejack@gmail.com>
      */
-    private function assertInstanceOf(ReadModelInterface $model) {
+    private function assertInstanceOf(ReadModelInterface $model, $class) {
 
-        $instance = $this->_class;
+        $instance = $class;
 
         if ( ! ($model instanceof $instance)) {
 
