@@ -31,7 +31,9 @@ abstract class ReadModelRepository implements ReadModelRepositoryInterface {
      */
     public function __construct(ReadModelStorageInterface $storage, $table, $class) {
 
-        $this->storage = $storage;
+        $this->storage  = $storage;
+        $this->table    = $table;
+        $this->class    = $class;
     }
 
     /**
