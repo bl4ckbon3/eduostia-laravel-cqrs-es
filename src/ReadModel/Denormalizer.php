@@ -49,7 +49,7 @@ abstract class Denormalizer {
      */
     protected function denormalize($readModelClass, DomainEventInterface $event) {
 
-        if ( ! in_array($readModelClass, class_implements(ReadModelInterface::class))) {
+        if ( ! in_array(ReadModelInterface::class, class_implements($readModelClass))) {
 
             throw new \InvalidArgumentException(sprintf('Class "%s" not implement ReadModelInterface', $readModelClass));
         }
