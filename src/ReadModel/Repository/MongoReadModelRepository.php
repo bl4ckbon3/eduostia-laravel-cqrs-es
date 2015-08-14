@@ -78,12 +78,7 @@ class MongoReadModelRepository implements ReadModelRepositoryInterface {
 
 		$results = $this->collection->find($this->modifyKeysForSearch($fields));
 
-		if ($results->count()) {
-
-			return array_map(array($this, 'deserialize'), iterator_to_array($results));
-		}
-
-		return array();
+		return $this->deserializeResults($results);
 	}
 
 	/**
@@ -102,6 +97,23 @@ class MongoReadModelRepository implements ReadModelRepositoryInterface {
 	public function remove($id) {
 
 		$this->collection->remove(array('id' => (string) $id, 'type' => $this->_class));
+	}
+
+	/**
+	 * Deserialize results.
+	 *
+	 * @param \MongoCursor $results
+	 *
+	 * @return array
+	 */
+	protected function deserializeResults(\MongoCursor $results)
+	{
+		if ($results->count()) {
+
+			return array_map(array($this, 'deserialize'), iterator_to_array($results));
+		}
+
+		return array();
 	}
 
 	/**
