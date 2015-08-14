@@ -89,6 +89,14 @@ abstract class ReadModelRepository implements ReadModelRepositoryInterface {
     }
 
     /**
+     * @return mixed
+     */
+    public function getInstance()
+    {
+        return $this->storage->getInstance($this->table);
+    }
+
+    /**
      * Remove read model from storage
      *
      * @param string $id

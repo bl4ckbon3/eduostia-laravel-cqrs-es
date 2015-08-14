@@ -99,6 +99,18 @@ class MongoStorage implements ReadModelStorageInterface {
     }
 
     /**
+     * Get collection instance.
+     *
+     * @param string $collection
+     *
+     * @return \MongoCollection
+     */
+    public function getInstance($collection)
+    {
+        return $this->_conn->{$collection};
+    }
+
+    /**
      * Deserialize array to ReadModelInterface
      *
      * @param array $serializedObject

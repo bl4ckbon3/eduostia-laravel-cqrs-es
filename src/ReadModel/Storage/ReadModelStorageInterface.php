@@ -76,4 +76,13 @@ interface ReadModelStorageInterface {
      * @author Iqbal Maulana <iq.bluejack@gmail.com>
      */
     public function remove($id, $table, $class);
+
+    /**
+     * Get collection instance.
+     *
+     * @param string $collection
+     *
+     * @return mixed
+     */
+    public function getInstance($collection);
 }

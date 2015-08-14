@@ -20,8 +20,9 @@ use MongoDB;
  */
 class MongoReadModelRepository implements ReadModelRepositoryInterface {
 
-	private $_collection;
 	private $_class;
+
+	protected $collection;
 
 	/**
 	 * @param MongoDB $client
@@ -30,7 +31,7 @@ class MongoReadModelRepository implements ReadModelRepositoryInterface {
 	 */
 	public function __construct(MongoDB $client, $collectionName, $class) {
 
-		$this->_collection  = $client->{$collectionName};
+		$this->collection  = $client->{$collectionName};
 		$this->_class       = $class;
 	}
 
@@ -49,11 +50,11 @@ class MongoReadModelRepository implements ReadModelRepositoryInterface {
 
 		if ($this->find($model->getId())) {
 
-			$this->_collection->update(array('type' => get_class($model), 'id' => $model->getId()), $params);
+			$this->collection->update(array('type' => get_class($model), 'id' => $model->getId()), $params);
 		}
 		else {
 
-			$this->_collection->insert($params);
+			$this->collection->insert($params);
 		}
 	}
 
@@ -62,7 +63,7 @@ class MongoReadModelRepository implements ReadModelRepositoryInterface {
 	 */
 	public function find($id) {
 
-		if ($record = $this->_collection->findOne(array('type' => $this->_class, 'id' => (string) $id))) {
+		if ($record = $this->collection->findOne(array('type' => $this->_class, 'id' => (string) $id))) {
 
 			return $this->deserialize($record);
 		}
@@ -75,7 +76,7 @@ class MongoReadModelRepository implements ReadModelRepositoryInterface {
 	 */
 	public function findBy(array $fields) {
 
-		$results = $this->_collection->find($this->modifyKeysForSearch($fields));
+		$results = $this->collection->find($this->modifyKeysForSearch($fields));
 
 		if ($results->count()) {
 
@@ -90,7 +91,7 @@ class MongoReadModelRepository implements ReadModelRepositoryInterface {
 	 */
 	public function findAll() {
 
-		$results = iterator_to_array($this->_collection->find(array('type' => $this->_class)));
+		$results = iterator_to_array($this->collection->find(array('type' => $this->_class)));
 
 		return array_map(array($this, 'deserialize'), $results);
 	}
@@ -100,7 +101,7 @@ class MongoReadModelRepository implements ReadModelRepositoryInterface {
 	 */
 	public function remove($id) {
 
-		$this->_collection->remove(array('id' => (string) $id, 'type' => $this->_class));
+		$this->collection->remove(array('id' => (string) $id, 'type' => $this->_class));
 	}
 
 	/**
