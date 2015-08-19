@@ -10,6 +10,8 @@
 
 namespace Cqrs\EventSourcing;
 use Cqrs\Domain\DomainEventInterface;
+use Cqrs\Serializer\DynamicSerializer;
+use Cqrs\Serializer\SerializableInterface;
 
 /**
  * EventSourcedEntity used Composite Pattern to keep bounded
@@ -17,7 +19,8 @@ use Cqrs\Domain\DomainEventInterface;
  * @author      Iqbal Maulana <iq.bluejack@gmail.com>
  * @created     4/14/15
  */
-abstract class AbstractEventSourcedEntity implements EventSourcedEntityInterface {
+abstract class AbstractEventSourcedEntity implements EventSourcedEntityInterface, SerializableInterface {
+	use DynamicSerializer;
 
 	/**
 	 * @var AbstractEventSourcedAggregateRoot
