@@ -18,6 +18,7 @@ use Cqrs\Domain\DomainMessageInterface;
 use Cqrs\Domain\Metadata;
 use Cqrs\Domain\ParameterBag;
 use Cqrs\Serializer\DynamicSerializer;
+use ReflectionClass;
 
 /**
  * AggregateRoot create Bounded Context of Entity
@@ -182,10 +183,18 @@ abstract class AbstractEventSourcedAggregateRoot implements AggregateRootInterfa
 	public static function deserialize(ParameterBag $params) {
 
 		$object = new static();
+		$reflection = new ReflectionClass(get_called_class());
+		$properties = $reflection->getProperties();
 
-		foreach($params->all() as $index => $value) {
+		foreach ($properties as $prop) {
+			if (preg_match('#@internal\n#s', $prop->getDocComment())) {
+				continue;
+			}
 
-			$object->{$index} = $value;
+			$prop->setAccessible(true);
+			$name = $prop->getName();
+			$value = $params->get($name) ?: $params->get(preg_replace('/^_+/', '', $prop->getName()));
+			$prop->setValue($object, $value);
 		}
 
 		return $object;
