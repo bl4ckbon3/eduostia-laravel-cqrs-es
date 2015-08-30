@@ -120,18 +120,19 @@ class QueryDispatcher implements QueryDispatcherInterface {
 
 		foreach($fields as $field) {
 
-			if ( ! isset($record[$field])) {
-
-				throw new \RuntimeException(sprintf('Field "%s" not found in: %s.', $field, json_encode($record)));
-			}
-
 			$method = sprintf('get%s', ucfirst($field));
 
 			if (method_exists($viewModel, $method)) {
-
-				$data[$field] = $viewModel->{$method}($record[$field], $record);
+				if (isset($record[$field])) {
+					$data[$field] = $viewModel->{$method}($record[$field], $record);
+				} else {
+					$data[$field] = $viewModel->{$method}($record);
+				}
 			}
 			else {
+				if ( ! isset($record[$field])) {
+					throw new \RuntimeException(sprintf('Field "%s" not found in: %s.', $field, json_encode($record)));
+				}
 
 				$data[$field] = $record[$field];
 			}
