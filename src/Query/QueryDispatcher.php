@@ -130,7 +130,7 @@ class QueryDispatcher implements QueryDispatcherInterface {
 				}
 			}
 			else {
-				if ( ! isset($record[$field])) {
+				if (!array_key_exists($field, $record)) {
 					throw new \RuntimeException(sprintf('Field "%s" not found in: %s.', $field, json_encode($record)));
 				}
 
